@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:57:20 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/05/13 19:05:46 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/05/14 10:13:04 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,19 @@
 	RPN =  Reverse Polish Notation
 	 A calculator for single digit numbers only,
 	 with the 4 operations (*, +, -, /)
-	* cannot be divided by 0
+	* cannot be divided by 0 - rule of subject
+	* no dupes handled - my choice
+	* 
 */
 
 int main(int ac, char **av)
 {
+	if (ac != 2)
+	{
+		std::cerr << "Must have 2 arguments: \"./RPN [Reverse Polish Notation's argument]";
+		return 1;
+	}
 	
+	RPN calculator(av[1]);
+	return calculator.run();
 };
