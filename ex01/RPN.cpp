@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/05/15 17:27:41 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/02 18:43:26 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 	  RPN's public functions
 	==========================
 */
-
 
 // =========
 //    OCF
@@ -67,12 +66,14 @@ RPN::~RPN()
 
 int RPN::run()
 {
-	if (!validChar() || !validTotalDigitsOp());
+	if (!validChar() || !validTotalDigitsOps())
 		return 1;
-	
-	
+	return 0;
 }
 
+// reject any invalid chars
+// also reject "You don’t need to handle brackets or decimal numbers"
+// 
 bool RPN::validChar()
 {	
 	for (int i = 0; i < _str.size(); ++i)
@@ -82,12 +83,12 @@ bool RPN::validChar()
 		if (_str[i] == '+' || _str[i] == '-' || _str[i] == '*' || _str[i] == '/')
 			continue;
 		else
-			return false;	
+			return errMsg("Invalid char"), false;	
 	}
 	return true;
 }
 
-bool RPN::validTotalDigitsOp()
+bool RPN::validTotalDigitsOps()
 {
 	int digits = 0;
 	int operators = 0;
@@ -112,7 +113,5 @@ bool RPN::validTotalDigitsOp()
 
 void RPN::errMsg(const char *msg)
 {
-	std::cerr << RED << msg; 
+	std::cerr << RED << "Error: " << msg; 
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:12 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/05/14 16:16:07 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/02 12:22:10 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ class RPN
 {
 	private:
 		RPN();
+		RPN(const RPN &);
+		RPN &operator=(const RPN &);
 		std::string _str;
 		// std::stack<std::list
 		bool validChar();
-		bool validTotalDigitsOp();
+		bool validTotalDigitsOps();
 		void errMsg(const char *);
 
 	public:
 		RPN(std::string);
-		RPN(const RPN &);
-		RPN &operator=(const RPN &);
 		~RPN();
 		int run();
 };
