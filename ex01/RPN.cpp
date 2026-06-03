@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/02 18:43:26 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/03 12:20:31 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 // RPN::RPN()
 // : _str()
 // {}
-
 
 
 /*
@@ -72,7 +71,7 @@ int RPN::run()
 }
 
 // reject any invalid chars
-// also reject "You don’t need to handle brackets or decimal numbers"
+// also following  "You don’t need to handle brackets or decimal numbers"
 // 
 bool RPN::validChar()
 {	
