@@ -6,10 +6,11 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:12 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 18:42:58 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:57:05 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// Include Guards or Header Guards
 #ifndef RPN_HPP
 # define RPN_HPP
 
@@ -34,11 +35,11 @@
 # define RL_COLOR		"\001\033[0m\002"
 
 // Libraries
-# include <iostream>	// std::cerr 
-# include <cctype> 		// std::isspace
+# include <iostream>	// std::cerr, std::cout
+# include <cctype> 		// std::isspace, std::isdigit
 # include <string>		// std::string
 # include <stack>		// std::stack
-# include <exception>	// std::runtime_error
+# include <exception>	// std::runtime_error, std::exception
 # include <list>		// std::list
 
 class RPN
