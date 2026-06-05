@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:12 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 18:04:35 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:42:58 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class RPN
 	private:
 		// private variables
 		std::string _str;
-		std::stack<int> _digitStack;
+		std::stack<int, std::list<int> > _digitStack;
 
 		// private OCF methods
 		RPN();
