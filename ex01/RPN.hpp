@@ -6,18 +6,12 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:12 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/02 12:22:10 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/05 18:04:35 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RPN_HPP
 # define RPN_HPP
-
-// Libraries
-# include <iostream>	// std::cerr 
-# include <cctype> 		// std::isspace
-# include <string>		// std::string
-# include <stack>		// std::stack
 
 // Colours
 # define WHITE			"\033[1;37m"
@@ -39,24 +33,41 @@
 # define RL_CYAN		"\001\033[1;36m\002"
 # define RL_COLOR		"\001\033[0m\002"
 
+// Libraries
+# include <iostream>	// std::cerr 
+# include <cctype> 		// std::isspace
+# include <string>		// std::string
+# include <stack>		// std::stack
+# include <exception>	// std::runtime_error
+# include <list>		// std::list
+
 class RPN
 {
 	private:
+		// private variables
+		std::string _str;
+		std::stack<int> _digitStack;
+
+		// private OCF methods
 		RPN();
 		RPN(const RPN &);
 		RPN &operator=(const RPN &);
-		std::string _str;
-		// std::stack<std::list
-		bool validChar();
-		bool validTotalDigitsOps();
-		void errMsg(const char *);
+
+		// private class methods
+		void _processDigit(char);
+		bool _isValidOperator(char);
+		void _processOperator(char);
+		//
+		// bool validChar();
+		// bool validTotalDigitsOps();
 
 	public:
+		// public OCF methods
 		RPN(std::string);
 		~RPN();
+
+		// public class methods
 		int run();
 };
-
-
 
 #endif
