@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:52 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 19:35:36 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/06 16:28:05 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 int main(int ac, char **av)
 {
+	if (ac != 2)
+	{
+		std::cerr << "Must have 2 arguments: ./btc [input file]";
+		return 1;
+	}
 	
+	BitcoinExchange bitcoin("perfectData.csv", av[1]);
+	return bitcoin.exchange();
 };
-
-
-// i can do this
-// Allah can make the impossibles , possible. as how He did so for Musa, Hajar, Muhammad, Maryam
-// so can He for you too
-// please heal them for the trauma i have done onto them ya allah 
-// im so sorry i didnt know better
-// im so sorry for doing selfish things
-// im so sorry i dont know fully about my condition

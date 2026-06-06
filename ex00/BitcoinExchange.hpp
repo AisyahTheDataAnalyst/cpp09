@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 19:48:55 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/06 17:10:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,20 @@
 
 // Libraries
 # include <iostream>	// std::cout, std::cerr
-# include <string>		// std::string
+# include <string>		// std::string, std::getline
 # include <map>			// std::map
-// # include <
+# include <fstream>		// std::ifstream
+# include <sstream>		// std::stringstream
 
-
-
+// Custom Class
 class BitcoinExchange
 {
 	private:
 		// private variables
-		std::map<std::string, double> _perfectData;	// for storing perfectData.csv
+		std::ifstream _dataFile;
+		std::ifstream _inputFile;
+		std::map<std::string, float> _perfectData_map;	// for storing perfectData.csv
+		
 		
 		// private OCF
 		BitcoinExchange();
@@ -54,15 +57,17 @@ class BitcoinExchange
 		BitcoinExchange &operator=(const BitcoinExchange &);		
 		
 		// private function members 
+		void saveDataIntoMap();
+		// void printResult();
 		
 		
 	public:
 		// public OCF
-		BitcoinExchange(argument);
+		BitcoinExchange(const char *, const char *);
 		~BitcoinExchange();
 		
 		// public methods
-		
+		int exchange();
 };
 
 

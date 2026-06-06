@@ -3,19 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/27 12:20:17 by aimokhta          #+#    #+#              #
-#    Updated: 2026/05/13 15:22:51 by aimokhta         ###   ########.fr        #
+#    Updated: 2026/06/06 14:52:15 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ex00
+NAME = btc
 
 CC = c++
 
 #compilation flags
-CFLAG = -Wall -Werror -Wextra -std=c++98 -g -O0 #-fsanitize=address
+CFLAG = -Wall -Werror -Wextra -std=c++98 -g -O0#-fsanitize=address
 # -g3 -O3 -O0 -fsanitize=address -fsanitize-recover=leak
 # valgrind --leak-check=full --show-leak-kinds=all
 # -g = gives error messages for debugging, needed by gdb / valgrind / helgrind
