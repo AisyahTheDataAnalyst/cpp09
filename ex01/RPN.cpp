@@ -6,21 +6,17 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 18:24:38 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/06 17:16:29 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-/*
-================================
-	  RPN's public functions
-================================
-*/
+// ================================
+// 	  RPN's public functions
+// ================================
 
-// =========
-//    OCF
-// =========
+// === OCF ===
 
 // Parameterized constructor
 RPN::RPN(std::string str) 
@@ -32,9 +28,7 @@ RPN::~RPN()
 {}
 
 
-// ===============
-// RPN's functions
-// ===============
+// ====== RPN's functions ======= 
 
 // reject any invalid chars
 // also following "You don’t need to process brackets or decimal numbers"
@@ -84,7 +78,7 @@ int RPN::run()
 	//! wrong: catch(std::exception e)
 	//* right: catch(std::exception &e)    #referencing the derived class
 	//* right: catch(std::runtime_error e) #specific to the used derived class
-	catch (std::runtime_error e) 
+	catch (std::runtime_error &e) 
 	{
 		// insufficient numbers ==> _digitStack <2 
 		// invalid operation    ==> division by zero
@@ -94,15 +88,11 @@ int RPN::run()
 }
 
 
-/*
-=================================
-	  RPN's private functions
-=================================
-*/
+// =================================
+// 	  RPN's private functions
+// =================================
 
-// ===============
-//   Private OCF    - no need to define in .cpp
-// ===============
+//  ======== Private OCF ==========    - no need to define in .cpp
 
 // Default constructor
 // RPN::RPN()
@@ -125,9 +115,7 @@ int RPN::run()
 // }
 
 
-// ===============
-// RPN's functions
-// ===============
+// ======== RPN's functions =========
 
 void RPN::_processDigit(char c)
 {
@@ -142,6 +130,7 @@ void RPN::_processDigit(char c)
 
 	// print testing 
 	// to demonstrate & prove that computer understand based on ascii, not what human see visually on terminal
+	// try to static_cast<int>(c) instead of [- '0'] -> it dosent work
 	// std::cout << "num in string now is " << num << std::endl;
 }
 
