@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/27 12:20:17 by aimokhta          #+#    #+#              #
-#    Updated: 2026/06/06 14:52:15 by marvin           ###   ########.fr        #
+#    Updated: 2026/06/06 19:59:57 by aimokhta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ CFLAG = -Wall -Werror -Wextra -std=c++98 -g -O0#-fsanitize=address
 SRC_DIR = src
 
 SRC =	main.cpp\
-		BitcoinExchange.cpp
+		BitcoinExchange.cpp\
+		Validations.cpp
 
 OBJ_FOLDER = obj_files
 

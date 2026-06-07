@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/06 17:11:22 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/06 21:04:47 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 // =========================
 
 // Public OCF
+
+BitcoinExchange::BitcoinExchange()
+: _dataFile("perfectData.csv"), _inputFile("input.txt"), _perfectData_map()
+{}
 
 // explicitely open the file via the constructor of std::ifstream
 BitcoinExchange::BitcoinExchange(const char *dataFile, const char *inputFile)
@@ -32,14 +36,14 @@ int BitcoinExchange::exchange()
     try
     {
         saveDataIntoMap();
-        // printResult();        
     }
     catch (std::exception &e)
     {
-        std::cerr << "Error: " << e.what();
+        std::cerr << "Error: " << e.what() << std::endl;
         return 1; 
     }
     
+	printResult();        
     return 0;
 }
 
@@ -54,7 +58,7 @@ int BitcoinExchange::exchange()
 void BitcoinExchange::saveDataIntoMap()
 {
     if (!_dataFile.is_open())
-        throw std::runtime_error("Unable to open file");
+        throw std::runtime_error("Unable to open perfectData.csv file");
 
     std::string date;
 	std::string rate;
@@ -85,22 +89,36 @@ void BitcoinExchange::saveDataIntoMap()
 	// std::cout << "total lines: " << i << std::endl;
 }
 
-// void BitcoinExchange::printResult()
-// {
-//     if (!_inputFile.is_open())
-// 		throw std::runtime_error("");
+void BitcoinExchange::printResult()
+{
+    if (!_inputFile.is_open())
+		throw std::runtime_error("Unable to open input.txt file");
 
-// 	std::string date;
-// 	std::string value;
-// 	float 
+	std::string date;
+	std::string tempValueStr;
+	double value;
 		
-// 	while (std::getline())
-// 	try
-// 	{
-		
-// 	}
-// 	catch (std::exception &e)
-// 	{
-// 		throw e;
-// 	}
-// }
+	while (std::getline(_inputFile, date, '|') && std::getline(_inputFile, tempValueStr))
+	{
+		if (date.find("date") != std::string::npos || tempValueStr.find("value") != std::string:npos)
+			continue;
+
+		try
+		{
+			dateValidation(date);
+			
+			std::stringstream tempValueSS(tempValueStr);
+			tempValueSS >> value;
+			valueValidation(value);
+
+			float exchangeRate = matchingDataDate(date, value);
+			float result = value * exchangeRate;
+
+			std::cout << date << " => " << value << " = " << result << std::endl;
+		}
+		catch (std::exception &e)
+		{
+    	    std::cerr << "Error: " << e.what() << std::endl;
+		}
+	}
+}

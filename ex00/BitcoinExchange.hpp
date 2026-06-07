@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/06 17:10:50 by marvin           ###   ########.fr       */
+/*   Updated: 2026/06/06 21:05:20 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,20 @@ class BitcoinExchange
 		
 		
 		// private OCF
-		BitcoinExchange();
 		BitcoinExchange(const BitcoinExchange &);
 		BitcoinExchange &operator=(const BitcoinExchange &);		
 		
 		// private function members 
 		void saveDataIntoMap();
-		// void printResult();
+		void printResult();
+		void dateValidation(std::string);
+		void valueValidation(double);
+		float matchingDataDate(std::string, double);
 		
 		
 	public:
 		// public OCF
+		BitcoinExchange();
 		BitcoinExchange(const char *, const char *);
 		~BitcoinExchange();
 		
