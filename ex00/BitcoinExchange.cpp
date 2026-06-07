@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/06 21:04:47 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/07 22:55:02 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,33 +18,73 @@
 
 // Public OCF
 
-BitcoinExchange::BitcoinExchange()
-: _dataFile("perfectData.csv"), _inputFile("input.txt"), _perfectData_map()
-{}
-
+// Parameterized Constructor
 // explicitely open the file via the constructor of std::ifstream
 BitcoinExchange::BitcoinExchange(const char *dataFile, const char *inputFile)
 : _dataFile(dataFile), _inputFile(inputFile), _perfectData_map()
-{}
+{
+	saveDataIntoMap();
+}
 
 BitcoinExchange::~BitcoinExchange()
-{}
+{
+	if (_dataFile.is_open() == true)
+		_dataFile.close();
+	if (_inputFile.is_open() == true)
+		_inputFile.close();
+}
 
 // Public member function
 int BitcoinExchange::exchange()
 {
-    try
-    {
-        saveDataIntoMap();
-    }
-    catch (std::exception &e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1; 
-    }
-    
-	printResult();        
-    return 0;
+	// 1. check if file is openable
+	if (!_inputFile.is_open())
+		throw std::ifstream::failure("Unable to open input file");
+
+	// 2. check the existing of a valid header
+	std::string line;
+	if (!(std::getline(_dataFile, line) && line == "date | value"))
+		throw std::invalid_argument("Input file dosen't have header of \"date | value\"");
+	
+	// 3.0 check line by line of input file
+	while (std::getline(_inputFile, line))
+	{
+		try
+		{
+			std::size_t pipePos;
+			std::size_t dotPos;
+			std::string date;
+			std::string valueStr;
+			float value;
+			float exchangeRate;
+			float result;		
+			
+			// 3.1 check existing of '|' and its delimeters (1 space before & after '|')
+			// make static check, not dynamic
+			pipePos = line.find('|');
+			if (!( (pipePos != std::string::npos) || 
+				(line[pipePos - 1] == ' ' && line[pipePos + 1] == ' ') ))
+			{
+				std::string errMsg = "Bad input => " + line;
+				throw std::invalid_argument(errMsg);
+			}
+
+			date = line.substr(0, pipePos - 1);		// -1 to also exclude 1 space before '|' 
+			inputDateValidation(date);
+			
+			valueStr = line.substr(pipePos + 2);	// +2 to also exclude 1 space after '|'
+			value = inputValueValidation(valueStr);
+
+			exchangeRate = matchingDataDate(date, value);
+			result = value * exchangeRate;
+
+			std::cout << date << " => " << value << " = " << result << std::endl;
+		}
+		catch (std::exception &e)
+		{
+    	    std::cerr << "Error: " << e.what() << std::endl;
+		}
+	}
 }
 
 // ===========================
@@ -55,30 +95,33 @@ int BitcoinExchange::exchange()
 
 // Private member functions
 
+// data.csv is provided by 42 
+// what 42 providedwill always be perfect, just like FdF's maps
+// thus no need to be checked & validated
+// esp when its not a user input, its a database
 void BitcoinExchange::saveDataIntoMap()
 {
     if (!_dataFile.is_open())
-        throw std::runtime_error("Unable to open perfectData.csv file");
+        throw std::ifstream::failure("Unable to open data file");
 
-    std::string date;
+	std::string firstLine;
+	if (!(std::getline(_dataFile, firstLine) && firstLine == "date,exchange_rate"))
+		throw std::invalid_argument("Data file dosen't have header of \"date,exchange_rate\"");
+    
+	std::string date;
 	std::string rate;
 	float exchangeRate;
-	int i = 0;
+	while (std::getline(_dataFile, date, ',') && std::getline(_dataFile, rate))
+	{
+		std::stringstream rateSS(rate);
+		rateSS >> exchangeRate;
 
-   while (std::getline(_dataFile, date, ',') && std::getline(_dataFile, rate))
-   {
-		std::stringstream tempRate(rate);
-		tempRate >> exchangeRate;
-		if (i >= 1)
+		if (!date.empty())
 		{
-			if (!date.empty())
-			{
-				// std::cout << "i is " << i << std::endl;
-				_perfectData_map[date] = exchangeRate;
-				date.clear();
-			}
+			// std::cout << "i is " << i << std::endl;
+			_perfectData_map[date] = exchangeRate;
+			date.clear();
 		}
-		++i;
 	}
 	_dataFile.close();
 	
@@ -87,38 +130,4 @@ void BitcoinExchange::saveDataIntoMap()
 	// 	it != _perfectData_map.end(); ++it)
 	// 	std::cout << it->first << " = " << it->second << " ." << std::endl;
 	// std::cout << "total lines: " << i << std::endl;
-}
-
-void BitcoinExchange::printResult()
-{
-    if (!_inputFile.is_open())
-		throw std::runtime_error("Unable to open input.txt file");
-
-	std::string date;
-	std::string tempValueStr;
-	double value;
-		
-	while (std::getline(_inputFile, date, '|') && std::getline(_inputFile, tempValueStr))
-	{
-		if (date.find("date") != std::string::npos || tempValueStr.find("value") != std::string:npos)
-			continue;
-
-		try
-		{
-			dateValidation(date);
-			
-			std::stringstream tempValueSS(tempValueStr);
-			tempValueSS >> value;
-			valueValidation(value);
-
-			float exchangeRate = matchingDataDate(date, value);
-			float result = value * exchangeRate;
-
-			std::cout << date << " => " << value << " = " << result << std::endl;
-		}
-		catch (std::exception &e)
-		{
-    	    std::cerr << "Error: " << e.what() << std::endl;
-		}
-	}
 }

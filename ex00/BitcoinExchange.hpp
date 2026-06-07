@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/06 21:05:20 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/07 23:11:52 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # include <map>			// std::map
 # include <fstream>		// std::ifstream
 # include <sstream>		// std::stringstream
+# include <cfloat>		// FLT_MIN, FLT_MAX
 
 // Custom Class
 class BitcoinExchange
@@ -50,22 +51,19 @@ class BitcoinExchange
 		std::ifstream _inputFile;
 		std::map<std::string, float> _perfectData_map;	// for storing perfectData.csv
 		
-		
 		// private OCF
+		BitcoinExchange();
 		BitcoinExchange(const BitcoinExchange &);
 		BitcoinExchange &operator=(const BitcoinExchange &);		
 		
 		// private function members 
 		void saveDataIntoMap();
-		void printResult();
-		void dateValidation(std::string);
-		void valueValidation(double);
-		float matchingDataDate(std::string, double);
-		
+		void inputDateValidation(std::string);
+		float inputValueValidation(std::string);
+		float matchingDataDate(std::string, float);
 		
 	public:
 		// public OCF
-		BitcoinExchange();
 		BitcoinExchange(const char *, const char *);
 		~BitcoinExchange();
 		
