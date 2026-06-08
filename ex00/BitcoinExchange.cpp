@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/07 22:55:02 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:28:42 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int BitcoinExchange::exchange()
 			date = line.substr(0, pipePos - 1);		// -1 to also exclude 1 space before '|' 
 			inputDateValidation(date);
 			
+			// 											getline dosent include newline into target string
 			valueStr = line.substr(pipePos + 2);	// +2 to also exclude 1 space after '|'
 			value = inputValueValidation(valueStr);
 

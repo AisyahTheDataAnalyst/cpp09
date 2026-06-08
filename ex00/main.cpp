@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:52 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/07 20:08:02 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 09:10:07 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main(int ac, char **av)
 	
 	try
 	{
+		// not related & not suppose to handle - encoding and file extension control - leon said
 		// BitcoinExchange bitcoin; -> cannot, coz wont be taking the argument of av[1]
 		BitcoinExchange bitcoin("perfectData.csv", av[1]);
 		return bitcoin.exchange();
