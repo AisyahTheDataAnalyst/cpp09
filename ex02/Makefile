@@ -6,11 +6,11 @@
 #    By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/27 12:20:17 by aimokhta          #+#    #+#              #
-#    Updated: 2026/05/13 15:23:43 by aimokhta         ###   ########.fr        #
+#    Updated: 2026/06/08 16:52:03 by aimokhta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ex02
+NAME = PmergeMe
 
 CC = c++
 
