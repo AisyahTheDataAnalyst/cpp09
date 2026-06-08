@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 13:52:44 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 16:41:20 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 // Parameterized Constructor
 // explicitely open the file via the constructor of std::ifstream
-BitcoinExchange::BitcoinExchange(const char *dataFile, const char *inputFile)
-: _dataFile(dataFile), _inputFile(inputFile), _perfectData_map()
+BitcoinExchange::BitcoinExchange(std::string dataFilename, std::string inputFilename)
+: _dataFile(dataFilename.c_str()), _inputFile(inputFilename.c_str()), _perfectData_map()
 {
 	saveDataIntoMap();
 }
@@ -39,11 +39,11 @@ void BitcoinExchange::exchange()
 {
 	// 1. check if file is openable
 	if (!_inputFile.is_open())
-		throw std::ifstream::failure("Unable to open input file");
+		throw std::ifstream::failure("Unable to open input file or file dosent exist");
 
 	// 2. check the existing of a valid header
 	std::string line;
-	if (!(std::getline(_dataFile, line) && line == "date | value"))
+	if (!(std::getline(_inputFile, line) && line == "date | value"))
 		throw std::invalid_argument("Input file dosen't have header of \"date | value\"");
 	
 	// 3.0 check line by line of input file
@@ -52,32 +52,41 @@ void BitcoinExchange::exchange()
 		try
 		{
 			std::size_t pipePos;
+			std::size_t spaceBeforePipe;
+			std::size_t spaceAfterPipe;
 			std::string date;
 			std::string valueStr;
-			float value;
-			float exchangeRate;
-			float result;		
+			double value;
+			double exchangeRate;
+			double result;		
 			
 			// 3.1 check existing of '|' and its delimeters (1 space before & after '|')
 			// make static check, not dynamic
 			pipePos = line.find('|');
-			if (!( (pipePos != std::string::npos) || 
-				(line[pipePos - 1] == ' ' && line[pipePos + 1] == ' ') ))
+			spaceBeforePipe = line.find(' ', pipePos - 1);
+			spaceAfterPipe = line.find(' ', pipePos + 1);
+			if (!(pipePos != std::string::npos && 
+				  spaceBeforePipe != std::string::npos && 
+				  spaceAfterPipe != std::string::npos   ))
 			{
-				std::string errMsg = "Bad input => " + line;
+				std::string errMsg = "Bad input => \"" + line + "\"";
 				throw std::invalid_argument(errMsg);
 			}
 
-			date = line.substr(0, pipePos - 1);		// -1 to also exclude 1 space before '|' 
+			// 3.2 check date validity
+			date = line.substr(0, pipePos - 1);		// -1 to exclude 1 space before '|' 
 			inputDateValidation(date);
 			
-			// 											getline dosent include newline into target string
-			valueStr = line.substr(pipePos + 2);	// +2 to also exclude 1 space after '|'
+			// 3.3 check value validity
+			// getline dosent include newline into target string
+			valueStr = line.substr(pipePos + 2);	// +2 to exclude 1 space after '|'
 			value = inputValueValidation(valueStr);
 
+			// 3.4 check if theres matching lower_bound date to the iput date
 			exchangeRate = matchingDataDate(date);
-			result = value * exchangeRate;
 
+			// 3.5 get & print result
+			result = value * exchangeRate;
 			std::cout << date << " => " << value << " = " << result << std::endl;
 		}
 		catch (std::exception &e)
@@ -85,6 +94,8 @@ void BitcoinExchange::exchange()
 			std::cerr << "Error: " << e.what() << std::endl;
 		}
 	}
+	
+	_inputFile.close();
 }
 
 // ===========================
@@ -110,17 +121,17 @@ void BitcoinExchange::saveDataIntoMap()
 	
 	std::string date;
 	std::string rate;
-	float exchangeRate;
+	double exchangeRate;
 	while (std::getline(_dataFile, date, ',') && std::getline(_dataFile, rate))
 	{
 		std::stringstream rateSS(rate);
-		rateSS >> exchangeRate;
+		rateSS >> exchangeRate;			// use this method coz std::stoi() exist from C++11 only
 
 		if (!date.empty())
 		{
-			// std::cout << "i is " << i << std::endl;
 			_perfectData_map[date] = exchangeRate;
 			date.clear();
+			// std::cout << "i is " << i << std::endl;
 		}
 	}
 	_dataFile.close();

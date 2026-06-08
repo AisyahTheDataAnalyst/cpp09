@@ -14,18 +14,20 @@
 
 void BitcoinExchange::inputDateValidation(std::string date)
 {
-	// 1. check any invalid characters, not even a space
+	// 1. check any invalid characters, not even a space, or empty
+	if (date.empty())
+		throw std::invalid_argument("Invalid date - empty date");
 	if (!(date.find_first_not_of("-0123456789") == std::string::npos))
 		throw std::invalid_argument("Invalid date - have invalid character");
 
 	// 2. check date format (must use - format, not / or .)
 	if (!(date[4] == '-' && date[7] == '-'))
-		throw std::invalid_argument("Invaid date - not following subject's format requirement, Year-Month-Day");
+		throw std::invalid_argument("Invalid date - not following subject's format requirement, YYYY-MM-DD");
 	
 	// 3. must numbers only within year & month & day
-	std::string year = date.substr(0, 4);
-	std::string month = date.substr(5, 2);
-	std::string day = date.substr(8);
+	std::string year = date.substr(0, date.find('-'));
+	std::string month = date.substr(date.find('-') + 1, date.rfind('-'));
+	std::string day = date.substr(date.rfind('-') + 1);
 	if (!(year.find_first_not_of("0123456789")  == std::string::npos ||
 		  month.find_first_not_of("0123456789") == std::string::npos ||
 		  day.find_first_not_of("0123456789")   == std::string::npos   ))
@@ -35,14 +37,8 @@ void BitcoinExchange::inputDateValidation(std::string date)
 	int yrInt = std::atoi(year.c_str());
 	int mnthInt = std::atoi(month.c_str());
 	int dayInt = std::atoi(day.c_str());
-
-	// 5. year shouldnt be too early
-	std::string earliestDate = _perfectData_map.begin()->first;
-	int earliestYr = std::atoi(earliestDate.substr(0, 4).c_str());
-	if (!(yrInt >= earliestYr))
-		throw std::invalid_argument("Invalid date - year date is too early");
-
-	// 6. check leap year
+		
+	// 5. check leap year
 	// =======================================================================================================
 	// source : https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/determine-a-leap-year
 	// LEAP YEAR DETERMINATION :
@@ -64,16 +60,16 @@ void BitcoinExchange::inputDateValidation(std::string date)
 	// =======================================================================================================
 	bool leapYr = (yrInt % 4 == 0 && yrInt % 100 != 0) || (yrInt % 400 == 0);
 	
-	// 7. check month validity
+	// 6. check month validity
 	if (!(mnthInt >= 1 && mnthInt <= 12))
 		throw std::invalid_argument("Invalid date - invalid month");
 
-	// 8. check day validity (seperatedly depending on month & leapyear or not)
+	// 7. check day validity (seperatedly depending on month & leapyear or not)
 	int totalDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	if (leapYr == true)
 		totalDays[1] = 29;
 	if (!(dayInt >= 1 && dayInt <= totalDays[mnthInt]))
-		throw std::invalid_argument("Invalid date - invalid days");
+		throw std::invalid_argument("Invalid date - invalid day");
 
 	// redundant month validity check
 	// 5. check month validity
@@ -88,20 +84,32 @@ void BitcoinExchange::inputDateValidation(std::string date)
 	// if (mnthIndex0 == "1")
 	// 	if (!(mnthIndex1.find_first_not_of("012") == std::string::npos))
 	// 		throw std::invalid_argument("Invalid date - invalid month");
-	
-	// redundant check earliest date validity - smartly solved by std::lower_bound in matchingDateData()
+
+	// redundant & inaccurate earlier date check - smartly solved by std::lower_bound
+	// esp for 2009-01-01
 	// std::string earliestDate = _perfectData_map.begin()->first;
 	// int earliestYr = std::atoi(earliestDate.substr(0, 4).c_str());
 	// int earliestMnth = std::atoi(earliestDate.substr(5, 2).c_str());
 	// int earliestDay = std::atoi(earliestDate.substr(8).c_str());
+	// if (!(yrInt >= earliestYr))
+	// 	throw std::invalid_argument("Invalid date - year date is too early");
+	// else
+	// {
+	// 	if (mnthInt >= earliestMnth &&)
+	// 		throw std::invalid_argument("Invalid date - month date is too early");
+	// 	if (dayInt >= earliestDay &&)
+	// 		throw std::invalid_argument("Invalid date - year date is too early");
+	// }
 }
 
-float BitcoinExchange::inputValueValidation(std::string valueStr)
+double BitcoinExchange::inputValueValidation(std::string valueStr)
 {
-	// 1. check any invalid characters, not even a space
+	// 1. check any invalid characters, not even a space, or empty
 	// newline is already excluded previously by std::getline from input file
+	if (valueStr.empty())
+		throw std::invalid_argument("Invalid value - empty value");
 	if (!(valueStr.find_first_not_of(".0123456789") == std::string::npos))
-		throw std::invalid_argument("Invalid value - have invalid character");
+		throw std::invalid_argument("Invalid value - have invalid character or a negative number");
 
 	// 2. check dot should be 1 only
 	// or else it could be inaccurate whole number after strtol, not float
@@ -110,27 +118,24 @@ float BitcoinExchange::inputValueValidation(std::string valueStr)
 		if (!(valueStr.substr(dotPos + 1).find('.') == std::string::npos))
 			throw std::invalid_argument("Invalid value - have more than one decimal point");
 
-	// 3. check valid float range
+	// 3. check if its a positive interger, between 1-1000 only
+	// negative number already detected above by unwanted characters, '-'
 	std::stringstream valueSS(valueStr);
-	double valueDouble;
-	valueSS >> valueDouble;
-	if (!(valueDouble >= FLT_MIN && valueDouble <= FLT_MAX))
-		throw std::invalid_argument("Invalid value - not within a valid float range");
+	double value;
+	valueSS >> value;
+	if (!(value >= 0 && value <= 1000))
+		throw std::invalid_argument("Invalid value - a too large number");
 
-	// 4. check its a positive interger
-	if (!(valueDouble >= 0))
-		throw std::invalid_argument("Invalid value - not a positive number");
+	// 4. check valid float range
+	if (!((value >= FLT_MIN && value <= FLT_MAX) || value == 0))
+		throw std::invalid_argument("Invalid value - not within a valid float range");
+	// ! why float cannot represent 0? - study this
 	
-	// 5. check its between 0 - 1000
-	if (!(valueDouble <= 1000))
-		throw std::invalid_argument("Invalid value - too large a nnumber");
-	
-	// 6. return float value! yeayy
-	float valueFloat = static_cast<float>(valueDouble);
-	return valueFloat;
+	// 5. return value! yeayy
+	return value;
 }
 
-float BitcoinExchange::matchingDataDate(std::string date)
+double BitcoinExchange::matchingDataDate(std::string date)
 {
 	// RULE & STRATEGY
 	// RULE: you must look BACKWARD IN TIME to find the most recent available price. You must never look forward into the future.
@@ -140,13 +145,21 @@ float BitcoinExchange::matchingDataDate(std::string date)
 	//  Be careful to use the LOWER DATE and not the upper one."
 	//
 	// STRATEGY: use std::lower_bound (comparing both dates of input file & data file)
-	// - will return the iterator to the lower bound date of data date than the input date
+	// - returns:
+	// -	.begin() 	=	if input date is earlier/same as data's earliest date
+	// -	exact match	=	if both dates of data & input is same
+	// -	.end()		=	if input date is further than data's last date
 	// - return end() if input date is earlier that the earliest data date in perfectData.csv
 	// - std::map iterate in ascending order of keys
 	
-	std::map<std::string, float>::iterator it;
+	std::map<std::string, double>::iterator it;
 	it = _perfectData_map.lower_bound(date);
+	// std::cerr << YELLOW << "matching date data:" << it->first << "\ndate:" << date << RESET << std::endl;
+	if (it == _perfectData_map.begin())
+		if (it->first != date)
+			throw std::invalid_argument("Invalid date - date is earlier than the earliest date of perfectData.csv");
 	if (it == _perfectData_map.end())
-		throw std::invalid_argument("Invalid date - date is earlier than the earliest date in perfectData.csv");
+		return _perfectData_map.rbegin()->second;
+	
 	return it->second;
 }

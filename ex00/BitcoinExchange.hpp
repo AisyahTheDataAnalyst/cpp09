@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 13:52:37 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 16:35:37 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@
 # include <iostream>	// std::cout, std::cerr
 # include <string>		// std::string, std::getline
 # include <map>			// std::map
-# include <fstream>		// std::ifstream
+# include <fstream>		// std::ifstream, .is_open()
 # include <sstream>		// std::stringstream
 # include <cfloat>		// FLT_MIN, FLT_MAX
 # include <cstdlib>		// std::atoi
+# include <iomanip>		// std::setprecision()
 
 // Custom Class
 class BitcoinExchange
@@ -50,7 +51,11 @@ class BitcoinExchange
 		// private variables
 		std::ifstream _dataFile;
 		std::ifstream _inputFile;
-		std::map<std::string, float> _perfectData_map;	// for storing perfectData.csv
+		std::map<std::string, double> _perfectData_map;	
+		// map
+		// - for storing perfectData.csv
+		// - stores double instead coz float couldnt accurately represents certain numbers
+		//   which does not represent exchange rate of 0.32 as in the perfectData.csv
 		
 		// private OCF
 		BitcoinExchange();
@@ -58,18 +63,18 @@ class BitcoinExchange
 		BitcoinExchange &operator=(const BitcoinExchange &);		
 		
 		// private function members 
-		void saveDataIntoMap();
-		void inputDateValidation(std::string);
-		float inputValueValidation(std::string);
-		float matchingDataDate(std::string);
+		void	saveDataIntoMap();
+		void	inputDateValidation(std::string);
+		double	inputValueValidation(std::string);
+		double	matchingDataDate(std::string);
 		
 	public:
 		// public OCF
-		BitcoinExchange(const char *, const char *);
+		BitcoinExchange(std::string, std::string);
 		~BitcoinExchange();
 		
 		// public methods
-		void exchange();
+		void	exchange();
 };
 
 
