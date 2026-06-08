@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 13:28:47 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:52:37 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@
 # include <fstream>		// std::ifstream
 # include <sstream>		// std::stringstream
 # include <cfloat>		// FLT_MIN, FLT_MAX
+# include <cstdlib>		// std::atoi
 
 // Custom Class
 class BitcoinExchange
@@ -60,7 +61,7 @@ class BitcoinExchange
 		void saveDataIntoMap();
 		void inputDateValidation(std::string);
 		float inputValueValidation(std::string);
-		float matchingDataDate(std::string, float);
+		float matchingDataDate(std::string);
 		
 	public:
 		// public OCF
@@ -68,7 +69,7 @@ class BitcoinExchange
 		~BitcoinExchange();
 		
 		// public methods
-		int exchange();
+		void exchange();
 };
 
 

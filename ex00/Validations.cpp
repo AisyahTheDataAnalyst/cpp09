@@ -130,17 +130,23 @@ float BitcoinExchange::inputValueValidation(std::string valueStr)
 	return valueFloat;
 }
 
-float BitcoinExchange::matchingDataDate(std::string date, float value)
+float BitcoinExchange::matchingDataDate(std::string date)
 {
-	// 1. check if its way before the earliest date in perfectData.csv
+	// RULE & STRATEGY
 	// RULE: you must look BACKWARD IN TIME to find the most recent available price. You must never look forward into the future.
 	// subject.pdf says,
 	// "If the date used in the input does not exist in your DB 
 	//  then you must use the closest date contained in your DB. 
 	//  Be careful to use the LOWER DATE and not the upper one."
+	//
+	// STRATEGY: use std::lower_bound (comparing both dates of input file & data file)
+	// - will return the iterator to the lower bound date of data date than the input date
+	// - return end() if input date is earlier that the earliest data date in perfectData.csv
+	// - std::map iterate in ascending order of keys
 	
-
-
-
-
+	std::map<std::string, float>::iterator it;
+	it = _perfectData_map.lower_bound(date);
+	if (it == _perfectData_map.end())
+		throw std::invalid_argument("Invalid date - date is earlier than the earliest date in perfectData.csv");
+	return it->second;
 }

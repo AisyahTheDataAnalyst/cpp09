@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 13:28:42 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/08 13:52:44 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ BitcoinExchange::~BitcoinExchange()
 }
 
 // Public member function
-int BitcoinExchange::exchange()
+void BitcoinExchange::exchange()
 {
 	// 1. check if file is openable
 	if (!_inputFile.is_open())
@@ -52,7 +52,6 @@ int BitcoinExchange::exchange()
 		try
 		{
 			std::size_t pipePos;
-			std::size_t dotPos;
 			std::string date;
 			std::string valueStr;
 			float value;
@@ -76,14 +75,14 @@ int BitcoinExchange::exchange()
 			valueStr = line.substr(pipePos + 2);	// +2 to also exclude 1 space after '|'
 			value = inputValueValidation(valueStr);
 
-			exchangeRate = matchingDataDate(date, value);
+			exchangeRate = matchingDataDate(date);
 			result = value * exchangeRate;
 
 			std::cout << date << " => " << value << " = " << result << std::endl;
 		}
 		catch (std::exception &e)
 		{
-    	    std::cerr << "Error: " << e.what() << std::endl;
+			std::cerr << "Error: " << e.what() << std::endl;
 		}
 	}
 }
@@ -102,13 +101,13 @@ int BitcoinExchange::exchange()
 // esp when its not a user input, its a database
 void BitcoinExchange::saveDataIntoMap()
 {
-    if (!_dataFile.is_open())
-        throw std::ifstream::failure("Unable to open data file");
+	if (!_dataFile.is_open())
+		throw std::ifstream::failure("Unable to open data file");
 
 	std::string firstLine;
 	if (!(std::getline(_dataFile, firstLine) && firstLine == "date,exchange_rate"))
 		throw std::invalid_argument("Data file dosen't have header of \"date,exchange_rate\"");
-    
+	
 	std::string date;
 	std::string rate;
 	float exchangeRate;
