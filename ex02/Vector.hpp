@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Vector.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/13 18:58:35 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/09 18:32:13 by aimokhta         ###   ########.fr       */
+/*   Created: 2026/06/09 17:50:37 by aimokhta          #+#    #+#             */
+/*   Updated: 2026/06/09 19:47:41 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "PmergeMe.hpp"
+#ifndef VECTOR_HPP
+# define VECTOR_HPP
 
-int main(int ac, char **av)
+# include <vector>
+
+struct Vector
 {
-	if (ac <= 2)
-	{
-		std::cerr << "Insufficient arguments" << std::endl;
-		return 1;
-	}
+	public:
+		std::vector<int>	contnr;
+		long				elapseTime;
+		// void				sort();
+};
 
-	try 
-	{
-		PmergeMe jacobs(ac, av);
-		jacobs.activate();
-		return 0;	
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl;
-		return 1;
-	}
-}
+#endif

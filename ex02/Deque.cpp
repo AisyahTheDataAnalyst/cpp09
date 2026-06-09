@@ -1,34 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Deque.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/13 18:58:35 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/09 18:32:13 by aimokhta         ###   ########.fr       */
+/*   Created: 2026/06/09 17:48:56 by aimokhta          #+#    #+#             */
+/*   Updated: 2026/06/09 17:50:55 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "PmergeMe.hpp"
-
-int main(int ac, char **av)
-{
-	if (ac <= 2)
-	{
-		std::cerr << "Insufficient arguments" << std::endl;
-		return 1;
-	}
-
-	try 
-	{
-		PmergeMe jacobs(ac, av);
-		jacobs.activate();
-		return 0;	
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl;
-		return 1;
-	}
-}
+# include "Deque.hpp"
