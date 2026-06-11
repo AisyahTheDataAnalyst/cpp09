@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Deque.hpp                                          :+:      :+:    :+:   */
+/*   Pair.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/09 17:50:39 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/09 19:47:41 by aimokhta         ###   ########.fr       */
+/*   Created: 2026/06/11 08:18:44 by aimokhta          #+#    #+#             */
+/*   Updated: 2026/06/11 19:08:17 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEQUE_HPP
-# define DEQUE_HPP
+#ifndef PAIR_HPP
+# define PAIR_HPP
 
-# include <deque>
+# include "Element.hpp"
 
-struct Deque
+struct Pair
 {
+	private:	
+		Element _bigger;
+		Element _smaller;
+
 	public:
-		std::deque<int>	contnr;
-		long			elapseTime;
-		// void			sort();
+		Pair();
+		Pair(const Element &, const Element &);
+		Pair(const Pair &);
+		Pair &operator=(const Pair &);
+		Pair &operator()(const Element &, const Element &);
+		Pair &operator()(const Pair &);
+		~Pair();
+		const Element &getBigger() const;
+		const Element &getSmaller() const;
 };
+
 
 #endif

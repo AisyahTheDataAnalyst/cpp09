@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/09 19:50:01 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/11 19:33:01 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,18 @@
 // Public OCF
 
 // Parameterized Constructor
+// All parsing is here 
 PmergeMe::PmergeMe(int ac, char **av)
 {
 	for (int i = 1; i < ac; ++i)
 	{
-		int num = std::atoi(_isDigits(av[i]));
-		_vector.contnr.push_back(num);
-		_deque.contnr.push_back(num);
+		int num = _isValidArg(av[i]);
+		_vector.cont.push_back(num);
+		_deque.cont.push_back(num);
 	}
-	_rawSequence = _vector.contnr;
-	_isUnsorted(_rawSequence);
+	_rawSequence = _vector.cont;
+	
+	_isSorted(false, _rawSequence);
 }
 
 // Destructor
@@ -36,7 +38,6 @@ PmergeMe::~PmergeMe() {}
 
 
 // Public member functions
-
 void PmergeMe::activate()
 {
 	struct timeval start, end;
@@ -44,7 +45,7 @@ void PmergeMe::activate()
 
 
 	gettimeofday(&start, NULL);
-	// _vector.sort();
+	_FordJohnsonAlgo(_vector);
 	usleep(10);
 	gettimeofday(&end, NULL);
 	sec = end.tv_sec - start.tv_sec;
@@ -53,7 +54,7 @@ void PmergeMe::activate()
 
 	
 	gettimeofday(&start, NULL);
-	// _deque.sort();
+	_FordJohnsonAlgo(_deque);
 	usleep(100);
 	gettimeofday(&end, NULL);
 	sec = end.tv_sec - start.tv_sec;
@@ -63,8 +64,8 @@ void PmergeMe::activate()
 
 	_printNumbers(BEFORE);
 	_printNumbers(AFTER);
-	_printTimes(_vector.elapseTime, "vector");
-	_printTimes(_deque.elapseTime, "deque");
+	_printTime(_vector.elapseTime, "vector");
+	_printTime(_deque.elapseTime, "deque");
 }
 
 
@@ -76,27 +77,43 @@ void PmergeMe::activate()
 
 // Private member functions
 
-const char *PmergeMe::_isDigits(const char *av)
+// Must be: (must use the merge-insert sort algorithm to sort the positive integer sequence)
+// 1. Digits
+// 2. Positive interger 
+// 3. Not overflow
+// 4. Dupes? Accept => easier than make it non-dupes only
+int PmergeMe::_isValidArg(std::string av)
 {
-	for (std::size_t i = 0; i < std::strlen(av); ++i)
-	{
-		unsigned char c = static_cast<unsigned char>(av[i]);	
-		if (!std::isdigit(c))
-			throw std::invalid_argument("Invalid argument");
-	}
-	return av;
+	// 1. Digit characters only
+	// - No '-' or '+' too
+	if (!(av.find_first_not_of("0123456789") == std::string::npos))
+		throw std::invalid_argument("Invalid argument - invalid character or negative number");
+	
+	// 2. Positive interger
+	// 3. not overflow interger
+	double avLong = std::atol(av.c_str());
+	if (!(avLong >= 0 || avLong <= INT_MAX))
+		throw std::invalid_argument("Invalid argument - overflow");
+
+	return std::atoi(av.c_str());
 }
 
-void PmergeMe::_isUnsorted(std::vector<int> container)
+void PmergeMe::_isSorted(bool wantedScenario, std::vector<int> &container)
 {
-	std::vector<int>::iterator it = std::adjacent_find(container.begin(), container.end(), std::greater<int>());
-	if (it == container.end())
+	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
+	if (sorted == wantedScenario)
+		throw std::invalid_argument("Sorted arguments");
+}
+
+void PmergeMe::_isSorted(bool wantedScenario, std::deque<int> &container)
+{
+	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
+	if (sorted == wantedScenario)
 		throw std::invalid_argument("Sorted arguments");
 }
 
 void PmergeMe::_printNumbers(int when)
 {
-	// std::cout << ; 
 	if (when == BEFORE)
 	{
 		std::cout << "Before:\t";
@@ -107,15 +124,15 @@ void PmergeMe::_printNumbers(int when)
 	else
 	{
 		std::cout << "After:\t";
-		for (std::size_t i = 0; i < _vector.contnr.size(); ++i)
-			std::cout << _vector.contnr[i] << " ";
+		for (std::size_t i = 0; i < _vector.cont.size(); ++i)
+			std::cout << _vector.cont[i] << " ";
 		std::cout << std::endl;		
 	}
 }
 
-void PmergeMe::_printTimes(long elapsedTime, std::string container)
+void PmergeMe::_printTime(long elapsedTime, std::string contName)
 {
 	std::cout 
 	<< std::fixed
-	<< "Time to process a range of " << _vector.contnr.size() << " elements with std::" << container << " : " << elapsedTime << " us" << std::endl;
+	<< "Time to process a range of " << _vector.cont.size() << " elements with std::" << contName << " : " << elapsedTime << " us" << std::endl;
 }
