@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 22:16:39 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 23:18:59 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void PmergeMe::activate()
 	_printNumbers(AFTER);
 	_printTime(vElapse_microseconds, "vector");
 	_printTime(dElapse_microseconds, "deque");
-	std::cout << "comparison counts: " << Element::comparisonCount << std::endl;
-	std::cout << "total numbers: " << _vector.size() << std::endl;
+	_printAddDetails();
 }
 
 
@@ -117,7 +116,7 @@ void PmergeMe::_printNumbers(int when)
 void PmergeMe::_printTime(double elapsedTime, std::string contName)
 {
 	std::cout 
-	<< std::setprecision(5)
+	<< std::setprecision(7)
 	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << (double)elapsedTime << " us" << std::endl;
 }
 
@@ -172,3 +171,35 @@ const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
 	return fullInsertionOrder;
 }
 
+// Computes the Ford-Johnson worst-case comparisons for 'n' elements.
+// Fully compliant with C++98 standards.
+long PmergeMe::_worstCaseFJAComparisonCount(long n) 
+{
+    long totalComparisons = 0;
+    
+    // Change-of-base constant for base-2 logarithm
+    const double LOG_2 = std::log(2.0);
+
+    for (long k = 1; k <= n; ++k) {
+        // Calculate (3 * k) / 4 as a floating-point value
+        double value = (3.0 * k) / 4.0;
+        
+        // C++98 alternative to std::log2
+        double log2Value = std::log(value) / LOG_2;
+        
+        // Accumulate the ceiling of the log2 value
+        totalComparisons += static_cast<long>(std::ceil(log2Value));
+    }
+
+    return totalComparisons;
+}
+
+void PmergeMe::_printAddDetails()
+{
+	std::cout 
+	<< "\n===Additional Details===\n"
+	<< "Total elements sorted: " << _vector.size() << '\n'
+	<< "Total comparison count: " << Element::comparisonCount << '\n'
+	<< "Ford-Johnson Algorithm's ideal worst-case comparison count F(n) upon " << _vector.size() << " elements: " << _worstCaseFJAComparisonCount(_vector.size())
+	<< std::endl;
+}

@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:15 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 21:59:26 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 23:16:38 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # include <climits>		// INT_MAX
 # include <ctime>		// std::clock(), CLOCKS_PER_SEC;
 # include <iomanip>		// std::setprecision
+# include <cmath>		// std::ceil, std::log
 # include <vector>
 # include <deque>
 # include "Pair.hpp"
@@ -70,8 +71,10 @@ class PmergeMe
 		int		_isValidArg(std::string);
 		void	_printNumbers(int);
 		void	_printTime(double, std::string);
+		void	_printAddDetails();
 		const std::vector<int> _jacobsthalSequence(std::size_t);
-		
+		long	_worstCaseFJAComparisonCount(long n);
+
 		template <typename ContainerI>
 		void	_isSorted(bool, ContainerI &);
 		
@@ -82,13 +85,13 @@ class PmergeMe
 		void	_pairMainPend(ContainerI &, ContainerE &, ContainerE &);
 		
 		template <typename ContainerE>
-		void	_mergeSort(ContainerE &, ContainerE &);
+		void	_mergeSort(ContainerE &, ContainerE &); //, ContainerE &, ContainerE &);
 		
 		template <typename ContainerE>
 		ContainerE &_insertionSort(ContainerE &, ContainerE &);
 				
 		template <typename ContainerE>
-		void	_binarySearchInsertion(ContainerE &, Element);
+		void	_binarySearchInsertion(ContainerE &, Element, std::size_t);
 		
 		template <typename ContainerE, typename ContainerI>
 		void	_overwriteResult(ContainerE &, ContainerI &);	
