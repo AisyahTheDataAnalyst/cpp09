@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:35 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 01:49:52 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 17:58:51 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@
 /*
 	helpful articles:
 	1. https://medium.com/@mohammad.ali.ibrahim.525/ford-johnson-algorithm-merge-insertion-4b024f0c3d42
-	2. https://dev.to/emuminov/human-explanation-and-step-by-step-visualisation-of-the-ford-johnson-algorithm-5g91
-	3. breathe and go step by step, you can do this! :))))
+	2. https://medium.com/@toukmati2000/cpp09-ford-johnson-algorithm-e6ad43288d4b
+	3. https://dev.to/emuminov/human-explanation-and-step-by-step-visualisation-of-the-ford-johnson-algorithm-5g91
+	4. breathe and go step by step, you can do this! :))))
 */
 
 int main(int ac, char **av)

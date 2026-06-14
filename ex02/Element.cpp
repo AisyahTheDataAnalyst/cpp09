@@ -6,13 +6,15 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:29:10 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 13:36:36 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 19:16:25 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Element.hpp"
 
 int Element::comparisonCount = 0;
+
+bool Element::comparisonBool = false;
 
 Element::Element(int value, int id) : _value(value), _id() 
 { 
@@ -33,7 +35,8 @@ void Element::popId()	{_id.pop_back();}
 
 bool Element::operator>=(const Element &other) const
 {
-	++comparisonCount;
+	if (comparisonBool == true)
+		++comparisonCount;
 	if (this->_value >= other._value)
 		return true;
 	return false;
@@ -41,7 +44,8 @@ bool Element::operator>=(const Element &other) const
 
 bool Element::operator<=(const Element &other) const
 {
-	++comparisonCount;
+	if (comparisonBool == true)
+		++comparisonCount;
 	if (this->_value <= other._value)
 		return true;
 	return false;
@@ -59,7 +63,8 @@ Element &Element::operator=(const Element &other)
 
 bool Element::operator==(const Element &other) const
 {
-	++comparisonCount;
+	if (comparisonBool == true)
+		++comparisonCount;
 	if (this->_value == other._value)
 		return true;
 	return false;
@@ -67,7 +72,8 @@ bool Element::operator==(const Element &other) const
 
 bool Element::operator>(const Element &other) const
 {
-	++comparisonCount;
+	if (comparisonBool == true)
+		++comparisonCount;
 	if (this->_value > other._value)
 		return true;
 	return false;
@@ -75,7 +81,8 @@ bool Element::operator>(const Element &other) const
 
 bool Element::operator<(const Element &other) const
 {
-	++comparisonCount;
+	if (comparisonBool == true)
+		++comparisonCount;
 	if (this->_value < other._value)
 		return true;
 	return false;

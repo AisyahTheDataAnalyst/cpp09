@@ -6,7 +6,7 @@
 #    By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/27 12:20:17 by aimokhta          #+#    #+#              #
-#    Updated: 2026/06/14 01:53:33 by aimokhta         ###   ########.fr        #
+#    Updated: 2026/06/14 18:47:17 by aimokhta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,6 @@ SRC_DIR = src
 
 SRC =	main.cpp\
 		PmergeMe.cpp\
-		PmergeMe2.cpp\
 		Pair.cpp\
 		Element.cpp
 

@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 14:12:10 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 20:23:12 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ PmergeMe::PmergeMe(int ac, char **av)
 		_vector.push_back(num);
 		_deque.push_back(num);
 	}
-	_rawSequence = _vector;
-	_isSorted(false, _rawSequence);
+	_isSorted(false, _vector);
 	// _printNumbers(BEFORE);
 }
 
@@ -44,28 +43,31 @@ PmergeMe::~PmergeMe() {}
 void PmergeMe::activate()
 {
 	std::clock_t start, end;
-	double vElapse_microseconds; //, dElapse_microseconds;
+	double vElapse_microseconds, dElapse_microseconds;
 
+	Element::comparisonBool = true;
 	start = std::clock();
-	_theFordJohnsonAlgo();
-	// _isSorted(true, _vector);
+	_theFordJohnsonAlgo<std::vector<Element>, std::vector<int> >(_vector);
 	end = std::clock();
+	Element::comparisonBool = false;
 	vElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
 
 	
-	// start = std::clock();
-	// _theFordJohnsonAlgo(_deque);
+	// Element::comparisonBool = true;
+	start = std::clock();
+	_theFordJohnsonAlgo<std::deque<Element>, std::deque<int> >(_deque);
+	end = std::clock();
+	// Element::comparisonBool = false;
+	dElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
+
+	_isSorted(true, _vector);
 	// _isSorted(true, _deque);
-	// end = std::clock();
-	// dElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
-
-
 	_printNumbers(BEFORE);
 	_printNumbers(AFTER);
 	_printTime(vElapse_microseconds, "vector");
+	_printTime(dElapse_microseconds, "deque");
 	std::cout << "comparison counts: " << Element::comparisonCount << std::endl;
 	std::cout << "total numbers: " << _vector.size() << std::endl;
-	// _printTime(dElapse_microseconds, "deque");
 }
 
 
@@ -98,15 +100,6 @@ int PmergeMe::_isValidArg(std::string av)
 	return std::atoi(av.c_str());
 }
 
-void PmergeMe::_isSorted(bool wantedScenario, std::vector<int> &container)
-{
-	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
-	if (sorted != wantedScenario && sorted == true)
-		throw std::invalid_argument("Sorted arguments");
-	if (sorted != wantedScenario && sorted == false)
-		throw std::invalid_argument("Unsorted arguments");
-}
-
 void PmergeMe::_printNumbers(int when)
 {
 	if (when == BEFORE)
@@ -130,4 +123,78 @@ void PmergeMe::_printTime(double elapsedTime, std::string contName)
 	std::cout 
 	<< std::fixed
 	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << elapsedTime << " us" << std::endl;
+}
+
+// Jacobsthal Sequence is for:
+// upon pend chain
+// determine sequence of PEND CHAIN'S INDEX that should first be inserted into the main chain
+const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
+{
+	if (pendSize == 0)
+		throw std::invalid_argument("Pend's size is invalidly zero");
+	
+	
+	// 1. Construct JacobsthalSeq Sequence (0,1,1,3,5,11, .....)
+	// the 1st 2 numbers are fixed
+	std::vector<int> jacobsthalSeq;
+	jacobsthalSeq.push_back(0);
+	jacobsthalSeq.push_back(1);
+	
+	// Jacobsthal Sequence's formula: 
+	// current = prev + 2 × (prev of the prev)
+	while (1)
+	{
+		std::size_t current = jacobsthalSeq[jacobsthalSeq.size() - 1] + 2 * jacobsthalSeq[jacobsthalSeq.size() - 2];
+		jacobsthalSeq.push_back(static_cast<int>(current));
+		if (current >= pendSize)
+			break;
+	}
+	if (jacobsthalSeq.size() >= 3)
+		jacobsthalSeq.erase(jacobsthalSeq.begin() + 1);
+
+	// debug print
+	// std::cerr << "JS before full with pendsize of " << pendSize << std::endl; 
+	// for (std::size_t i = 0; i < jacobsthalSeq.size(); ++i)
+	// 	std::cerr << "order: " << jacobsthalSeq[i] << std::endl; 
+	// std::cerr << std::endl; 
+	//
+
+	std::vector<int> fullInsertionOrder;
+	fullInsertionOrder.push_back(0);
+	std::size_t latestSeq = 0;
+
+	for (std::size_t i = 1; i < jacobsthalSeq.size(); ++i) // 0, 1, 1, 3, 5 , pemdsize == 5
+	{
+		std::size_t currSeq = jacobsthalSeq[i];
+		if (currSeq == latestSeq)
+			continue;
+
+		if (currSeq >= pendSize)
+			currSeq = pendSize - 1;
+		
+		for (std::size_t order = currSeq; order > latestSeq; --order)
+			fullInsertionOrder.push_back(static_cast<int>(order));
+
+		latestSeq = currSeq;
+		if (latestSeq >= pendSize - 1)
+			break;
+	}
+
+	// debug print
+	// std::cerr << "fullorderJS" << std::endl; 
+	// for (std::size_t i = 0; i < fullInsertionOrder.size(); ++i)
+	// 	std::cerr << "order: " << fullInsertionOrder[i] << std::endl; 
+	// std::cerr << std::endl; 
+	//
+		
+	return fullInsertionOrder;
+}
+
+void PmergeMe::_isSorted(bool wantedScenario, std::vector<int> &container)
+{
+	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
+	if (sorted != wantedScenario && sorted == true)
+		throw std::invalid_argument("Sorted arguments");
+	if (sorted != wantedScenario && sorted == false)
+		throw std::invalid_argument("Unsorted arguments");
 }

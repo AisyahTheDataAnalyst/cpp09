@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:21:21 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/13 12:42:45 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 20:14:21 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 // Pair::Pair() : _bigger(Element()), _smaller(Element()) {}
 
 Pair::Pair(const Element &a, const Element &b)
-:	_bigger(a > b ? a : b),
-	_smaller(a < b ? a : b)
-{}
+: _bigger(a), _smaller(b)
+{
+	if (b > a)
+	{
+		this->_bigger = b;
+		this->_smaller = a;
+	}
+}
 
 Pair::Pair(const Pair &other)
 :	_bigger(other._bigger), _smaller(other._smaller) {}
@@ -34,8 +39,17 @@ Pair &Pair::operator=(const Pair &other)
 
 Pair &Pair::operator()(const Element &a, const Element &b)
 {
-	this->_bigger = a > b ? a : b;
-	this->_smaller = a < b ? a : b;
+	if (a > b)
+	{
+		this->_bigger = a;
+		this->_smaller = b;
+	}
+	else
+	{
+		this->_bigger = b;
+		this->_smaller = a;
+	}
+
 	return *this;
 }
 

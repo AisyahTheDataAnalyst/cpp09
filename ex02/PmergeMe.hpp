@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:15 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 11:46:47 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 18:52:23 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 # include <algorithm>	// std::adjacent_find()
 # include <functional>	// std::greater<int>()
 # include <climits>		// INT_MAX
-# include <math.h>		// std::ceil, std::log2
 # include <ctime>		// std::clock(), CLOCKS_PER_SEC;
 # include <vector>
 # include <deque>
@@ -68,27 +67,36 @@ class PmergeMe
 		PmergeMe &operator=(const PmergeMe &);
 		
 		// member functions
-				// 1. UTILS
 		int		_isValidArg(std::string);
-		// void	_isSorted(bool, std::vector<int> &);
-		void	_isSorted(bool, std::vector<int> &);
 		void	_printNumbers(int);
 		void	_printTime(double, std::string);
-				// 2. SORTING [Vector]
-		void	_theFordJohnsonAlgo();
-		void	_pairMainPend(std::vector<Element> &, std::vector<Element> &);
-		void	_mergeSort(std::vector<Element> &, std::vector<Element> &); //, std::vector<Element> &);
-		std::vector<Element> &_insertionSort(std::vector<Element> &, std::vector<Element> &);
 		const std::vector<int> _jacobsthalSequence(std::size_t);
-		void	_binarySearchInsertion(std::vector<Element> &, Element);
-		void	_overwriteResult(std::vector<Element> &);	
-
+		void	_isSorted(bool, std::vector<int> &);
+		
+		template <typename ContainerE, typename ContainerI>
+		void	_theFordJohnsonAlgo(ContainerI &);
+		
+		template <typename ContainerE, typename ContainerI>
+		void	_pairMainPend(ContainerI &, ContainerE &, ContainerE &);
+		
+		template <typename ContainerE>
+		void	_mergeSort(ContainerE &, ContainerE &);
+		
+		template <typename ContainerE>
+		ContainerE &_insertionSort(ContainerE &, ContainerE &);
+				
+		template <typename ContainerE>
+		void	_binarySearchInsertion(ContainerE &, Element);
+		
+		template <typename ContainerE, typename ContainerI>
+		void	_overwriteResult(ContainerE &, ContainerI &);	
+		
 	public:
 		PmergeMe(int, char **);
 		~PmergeMe();
 		void	activate();
 };
 
-// # include "PmergeMe.tpp"
+# include "PmergeMe.tpp"
 
 #endif
