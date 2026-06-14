@@ -6,13 +6,13 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:21:21 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/11 17:52:37 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/13 12:42:45 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Pair.hpp"
 
-Pair::Pair() : _bigger(Element()), _smaller(Element()) {}
+// Pair::Pair() : _bigger(Element()), _smaller(Element()) {}
 
 Pair::Pair(const Element &a, const Element &b)
 :	_bigger(a > b ? a : b),

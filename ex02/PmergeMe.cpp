@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/11 19:33:01 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 14:12:10 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ PmergeMe::PmergeMe(int ac, char **av)
 	for (int i = 1; i < ac; ++i)
 	{
 		int num = _isValidArg(av[i]);
-		_vector.cont.push_back(num);
-		_deque.cont.push_back(num);
+		_vector.push_back(num);
+		_deque.push_back(num);
 	}
-	_rawSequence = _vector.cont;
-	
+	_rawSequence = _vector;
 	_isSorted(false, _rawSequence);
+	// _printNumbers(BEFORE);
 }
 
 // Destructor
@@ -38,34 +38,34 @@ PmergeMe::~PmergeMe() {}
 
 
 // Public member functions
+
+// Convert the difference to microseconds
+// Multiply by 1,000,000 first to avoid integer division truncation
 void PmergeMe::activate()
 {
-	struct timeval start, end;
-	long sec, microsec;			// get precision both in seconds and remaining microseconds
+	std::clock_t start, end;
+	double vElapse_microseconds; //, dElapse_microseconds;
 
-
-	gettimeofday(&start, NULL);
-	_FordJohnsonAlgo(_vector);
-	usleep(10);
-	gettimeofday(&end, NULL);
-	sec = end.tv_sec - start.tv_sec;
-	microsec = end.tv_usec - start.tv_usec;
-	_vector.elapseTime = (sec * 1000000) + microsec;
+	start = std::clock();
+	_theFordJohnsonAlgo();
+	// _isSorted(true, _vector);
+	end = std::clock();
+	vElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
 
 	
-	gettimeofday(&start, NULL);
-	_FordJohnsonAlgo(_deque);
-	usleep(100);
-	gettimeofday(&end, NULL);
-	sec = end.tv_sec - start.tv_sec;
-	microsec = end.tv_usec - start.tv_usec;
-	_deque.elapseTime = (sec * 1000000) + microsec;
+	// start = std::clock();
+	// _theFordJohnsonAlgo(_deque);
+	// _isSorted(true, _deque);
+	// end = std::clock();
+	// dElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
 
 
 	_printNumbers(BEFORE);
 	_printNumbers(AFTER);
-	_printTime(_vector.elapseTime, "vector");
-	_printTime(_deque.elapseTime, "deque");
+	_printTime(vElapse_microseconds, "vector");
+	std::cout << "comparison counts: " << Element::comparisonCount << std::endl;
+	std::cout << "total numbers: " << _vector.size() << std::endl;
+	// _printTime(dElapse_microseconds, "deque");
 }
 
 
@@ -101,15 +101,10 @@ int PmergeMe::_isValidArg(std::string av)
 void PmergeMe::_isSorted(bool wantedScenario, std::vector<int> &container)
 {
 	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
-	if (sorted == wantedScenario)
+	if (sorted != wantedScenario && sorted == true)
 		throw std::invalid_argument("Sorted arguments");
-}
-
-void PmergeMe::_isSorted(bool wantedScenario, std::deque<int> &container)
-{
-	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
-	if (sorted == wantedScenario)
-		throw std::invalid_argument("Sorted arguments");
+	if (sorted != wantedScenario && sorted == false)
+		throw std::invalid_argument("Unsorted arguments");
 }
 
 void PmergeMe::_printNumbers(int when)
@@ -124,15 +119,15 @@ void PmergeMe::_printNumbers(int when)
 	else
 	{
 		std::cout << "After:\t";
-		for (std::size_t i = 0; i < _vector.cont.size(); ++i)
-			std::cout << _vector.cont[i] << " ";
+		for (std::size_t i = 0; i < _vector.size(); ++i)
+			std::cout << _vector[i] << " ";
 		std::cout << std::endl;		
 	}
 }
 
-void PmergeMe::_printTime(long elapsedTime, std::string contName)
+void PmergeMe::_printTime(double elapsedTime, std::string contName)
 {
 	std::cout 
 	<< std::fixed
-	<< "Time to process a range of " << _vector.cont.size() << " elements with std::" << contName << " : " << elapsedTime << " us" << std::endl;
+	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << elapsedTime << " us" << std::endl;
 }

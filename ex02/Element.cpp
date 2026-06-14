@@ -6,26 +6,34 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:29:10 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/11 17:36:34 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 13:36:36 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Element.hpp"
 
-Element::Element() : _value(-1), _id(-1) {}
+int Element::comparisonCount = 0;
 
-Element::Element(int value, int id) : _value(value), _id(id) {}
+Element::Element(int value, int id) : _value(value), _id() 
+{ 
+	_id.push_back(id); 
+}
 
 Element::Element(const Element &other) : _value(other._value), _id(other._id) {}
 
 Element::~Element() {}
 
-const int &Element::getValue() const {return _value;}
+int Element::getValue() const {return _value;}
 
-const int &Element::getId() const {return _id;}
+int Element::getId() const {return _id.back();}
+
+void Element::pushId(int additionalId)	{_id.push_back(additionalId);}
+
+void Element::popId()	{_id.pop_back();}
 
 bool Element::operator>=(const Element &other) const
 {
+	++comparisonCount;
 	if (this->_value >= other._value)
 		return true;
 	return false;
@@ -33,6 +41,7 @@ bool Element::operator>=(const Element &other) const
 
 bool Element::operator<=(const Element &other) const
 {
+	++comparisonCount;
 	if (this->_value <= other._value)
 		return true;
 	return false;
@@ -50,6 +59,7 @@ Element &Element::operator=(const Element &other)
 
 bool Element::operator==(const Element &other) const
 {
+	++comparisonCount;
 	if (this->_value == other._value)
 		return true;
 	return false;
@@ -57,6 +67,7 @@ bool Element::operator==(const Element &other) const
 
 bool Element::operator>(const Element &other) const
 {
+	++comparisonCount;
 	if (this->_value > other._value)
 		return true;
 	return false;
@@ -64,9 +75,8 @@ bool Element::operator>(const Element &other) const
 
 bool Element::operator<(const Element &other) const
 {
+	++comparisonCount;
 	if (this->_value < other._value)
 		return true;
 	return false;
 }
-
-

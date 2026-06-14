@@ -6,26 +6,31 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:29:19 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/11 19:08:12 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/13 17:37:59 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ELEMENT_HPP
 # define ELEMENT_HPP
 
+# include <vector>
+
 struct Element
 {
 	private:	
 		int _value;
-		int _id;
+		std::vector<int> _id;
+		Element();
 		
 	public:
-		Element();
+		static int comparisonCount;
 		Element(int, int);
 		Element(const Element &);
 		~Element();
-		const int &getValue() const;
-		const int &getId() const;
+		int getValue() const;
+		int getId() const;
+		void pushId(int additionalId);
+		void popId();
 		Element &operator=(const Element &);
 		bool operator>=(const Element &other) const;
 		bool operator<=(const Element &other) const;

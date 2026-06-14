@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:18:44 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/11 19:08:17 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/13 13:53:06 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ struct Pair
 	private:	
 		Element _bigger;
 		Element _smaller;
+		Pair();
 
 	public:
-		Pair();
 		Pair(const Element &, const Element &);
 		Pair(const Pair &);
 		Pair &operator=(const Pair &);

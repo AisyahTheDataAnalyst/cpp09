@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:35 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/10 19:43:47 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 01:49:52 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@
 
 int main(int ac, char **av)
 {
-	// RULE - Your program must be able to handle at least 3000 different integers.
-	// if (ac <= 3001)
-	if (ac <= 2)
+	if (ac <= 3)
 	{
 		std::cerr << "Error: Insufficient arguments" << std::endl;
 		return 1;

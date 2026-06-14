@@ -6,7 +6,7 @@
 #    By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/27 12:20:17 by aimokhta          #+#    #+#              #
-#    Updated: 2026/06/08 16:52:03 by aimokhta         ###   ########.fr        #
+#    Updated: 2026/06/14 01:53:33 by aimokhta         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,10 @@ CFLAG = -Wall -Werror -Wextra -std=c++98 -g -O0 #-fsanitize=address
 SRC_DIR = src
 
 SRC =	main.cpp\
-		PmergeMe.cpp
+		PmergeMe.cpp\
+		PmergeMe2.cpp\
+		Pair.cpp\
+		Element.cpp
 
 OBJ_FOLDER = obj_files
 
