@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:15 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 18:52:23 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 21:59:26 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # include <functional>	// std::greater<int>()
 # include <climits>		// INT_MAX
 # include <ctime>		// std::clock(), CLOCKS_PER_SEC;
+# include <iomanip>		// std::setprecision
 # include <vector>
 # include <deque>
 # include "Pair.hpp"
@@ -59,7 +60,6 @@ class PmergeMe
 		// variables
 		std::vector<int>	_vector;
 		std::deque<int>		_deque;
-		std::vector<int>	_rawSequence;
 		
 		// OCF functions
 		PmergeMe();
@@ -71,7 +71,9 @@ class PmergeMe
 		void	_printNumbers(int);
 		void	_printTime(double, std::string);
 		const std::vector<int> _jacobsthalSequence(std::size_t);
-		void	_isSorted(bool, std::vector<int> &);
+		
+		template <typename ContainerI>
+		void	_isSorted(bool, ContainerI &);
 		
 		template <typename ContainerE, typename ContainerI>
 		void	_theFordJohnsonAlgo(ContainerI &);

@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 20:23:12 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/14 22:16:39 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ PmergeMe::PmergeMe(int ac, char **av)
 		_deque.push_back(num);
 	}
 	_isSorted(false, _vector);
-	// _printNumbers(BEFORE);
+	_printNumbers(BEFORE);
 }
 
 // Destructor
@@ -45,6 +45,7 @@ void PmergeMe::activate()
 	std::clock_t start, end;
 	double vElapse_microseconds, dElapse_microseconds;
 
+	Element::comparisonCount = 0;
 	Element::comparisonBool = true;
 	start = std::clock();
 	_theFordJohnsonAlgo<std::vector<Element>, std::vector<int> >(_vector);
@@ -52,7 +53,7 @@ void PmergeMe::activate()
 	Element::comparisonBool = false;
 	vElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
 
-	
+	// Element::comparisonCount = 0;
 	// Element::comparisonBool = true;
 	start = std::clock();
 	_theFordJohnsonAlgo<std::deque<Element>, std::deque<int> >(_deque);
@@ -61,8 +62,7 @@ void PmergeMe::activate()
 	dElapse_microseconds = double(end - start) * 1000000.0 / CLOCKS_PER_SEC;
 
 	_isSorted(true, _vector);
-	// _isSorted(true, _deque);
-	_printNumbers(BEFORE);
+	_isSorted(true, _deque);
 	_printNumbers(AFTER);
 	_printTime(vElapse_microseconds, "vector");
 	_printTime(dElapse_microseconds, "deque");
@@ -94,35 +94,31 @@ int PmergeMe::_isValidArg(std::string av)
 	// 2. Positive interger
 	// 3. not overflow interger
 	double avLong = std::atol(av.c_str());
-	if (!(avLong >= 0 || avLong <= INT_MAX))
+	if (!(avLong >= 0 && avLong <= INT_MAX))
 		throw std::invalid_argument("Invalid argument - overflow");
-
+	if (avLong == 0)
+		throw std::invalid_argument("Invalid argument - 0 is not a positive interger");
+	
 	return std::atoi(av.c_str());
 }
 
 void PmergeMe::_printNumbers(int when)
 {
 	if (when == BEFORE)
-	{
 		std::cout << "Before:\t";
-		for (std::size_t i = 0; i < _rawSequence.size(); ++i)
-			std::cout << _rawSequence[i] << " ";
-		std::cout << std::endl;
-	}
 	else
-	{
 		std::cout << "After:\t";
-		for (std::size_t i = 0; i < _vector.size(); ++i)
-			std::cout << _vector[i] << " ";
-		std::cout << std::endl;		
-	}
+	
+	for (std::size_t i = 0; i < _vector.size(); ++i)
+		std::cout << _vector[i] << " ";
+	std::cout << std::endl;		
 }
 
 void PmergeMe::_printTime(double elapsedTime, std::string contName)
 {
 	std::cout 
-	<< std::fixed
-	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << elapsedTime << " us" << std::endl;
+	<< std::setprecision(5)
+	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << (double)elapsedTime << " us" << std::endl;
 }
 
 // Jacobsthal Sequence is for:
@@ -152,13 +148,6 @@ const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
 	if (jacobsthalSeq.size() >= 3)
 		jacobsthalSeq.erase(jacobsthalSeq.begin() + 1);
 
-	// debug print
-	// std::cerr << "JS before full with pendsize of " << pendSize << std::endl; 
-	// for (std::size_t i = 0; i < jacobsthalSeq.size(); ++i)
-	// 	std::cerr << "order: " << jacobsthalSeq[i] << std::endl; 
-	// std::cerr << std::endl; 
-	//
-
 	std::vector<int> fullInsertionOrder;
 	fullInsertionOrder.push_back(0);
 	std::size_t latestSeq = 0;
@@ -180,21 +169,6 @@ const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
 			break;
 	}
 
-	// debug print
-	// std::cerr << "fullorderJS" << std::endl; 
-	// for (std::size_t i = 0; i < fullInsertionOrder.size(); ++i)
-	// 	std::cerr << "order: " << fullInsertionOrder[i] << std::endl; 
-	// std::cerr << std::endl; 
-	//
-		
 	return fullInsertionOrder;
 }
 
-void PmergeMe::_isSorted(bool wantedScenario, std::vector<int> &container)
-{
-	bool sorted = (std::adjacent_find(container.begin(), container.end(), std::greater<int>()) == container.end());
-	if (sorted != wantedScenario && sorted == true)
-		throw std::invalid_argument("Sorted arguments");
-	if (sorted != wantedScenario && sorted == false)
-		throw std::invalid_argument("Unsorted arguments");
-}
