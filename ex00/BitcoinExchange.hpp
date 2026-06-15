@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:49 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 16:35:37 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:20:10 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ class BitcoinExchange
 		
 		// private function members 
 		void	saveDataIntoMap();
-		void	inputDateValidation(std::string);
-		double	inputValueValidation(std::string);
-		double	matchingDataDate(std::string);
+		void	inputDateValidation(std::string, std::string);
+		double	inputValueValidation(std::string, std::string);
+		double	matchingDataDate(std::string, std::string);
 		
 	public:
 		// public OCF

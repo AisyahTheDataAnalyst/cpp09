@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:52 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/09 17:46:23 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:12:32 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ int main(int ac, char **av)
 		return 1;
 	}
 	
-	// std::setprecision(10) => //!learn more
-	// std::fixed => //!learn more
-	//! must without std::fixed after std::cout so std::cout can dynamically drop unnecessary trailing 0
-	// std::cout << std::fixed;
-	// std::cout << std::setprecision(10);
+	// std::setprecision(n) 				===> sets the total number of significant digits displayed, n (both before and after the decimal point combined)
+	// std::fixed << std::setprecision(n)	===> rule changes to => Exactly n digits only after decimal point
+	//! for this exercise 					===> must without std::fixed std::cout can dynamically drop unnecessary trailing 0
+
+	// comment / uncomment below to show the effect of using this to evaluator
+	std::cout << std::setprecision(10);
 	
 	try
 	{
@@ -35,7 +36,7 @@ int main(int ac, char **av)
 	}
     catch (std::exception &e)
     {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << RED << "Error: " << e.what() << RESET << std::endl;
         return 1; 
     }
 

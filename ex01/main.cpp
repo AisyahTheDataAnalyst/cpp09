@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:57:20 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 16:34:08 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:19:03 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 	 A calculator for single digit numbers only,
 	 with the 4 operations (*, +, -, /)
 	* cannot be divided by 0 - rule of subject
-	* no dupes processd - my choice
-	* 
+	* no dupes processed - my choice
 */
 
 int main(int ac, char **av)

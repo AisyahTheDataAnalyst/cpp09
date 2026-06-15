@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/06 17:16:29 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:25:49 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,15 @@ int RPN::run()
 	
 	// must put & to get the exact what()'s message to avoid object slicing of the derived class 
 	// std::runtime_error is the derived class of base class std::exception
-	//! wrong: catch(std::exception e)
-	//* right: catch(std::exception &e)    #referencing the derived class
-	//* right: catch(std::runtime_error e) #specific to the used derived class
+	//* wrong: catch(std::exception e)		 #dosent take what is thrown by the program
+	//* right: catch(std::exception &e)		 #referencing the derived class
+	//* right: catch(std::runtime_error e)	 #specific to the used derived class
+	//* POWERR: catch(std::runtime_error &e) #specific & referencing to the used derived class
 	catch (std::runtime_error &e) 
 	{
 		// insufficient numbers ==> _digitStack <2 
 		// invalid operation    ==> division by zero
-		std::cerr << "ERROR: " << e.what();
+		std::cerr << "ERROR: " << e.what() << std::endl;
 		return 1;
 	}
 }
@@ -156,7 +157,7 @@ void RPN::_processOperator(char c)
 	rightNum = _digitStack.top();
 	_digitStack.pop();
 	
-	// print testing
+	// debug print testing
 	// std::cout << "rightnum now is << " << rightNum << std::endl;
 	// std::cout << "operator now is " << c << std::endl;
 	// std::cout << "leftnum now is << " << leftNum << std::endl;
@@ -176,6 +177,8 @@ void RPN::_processOperator(char c)
 		_digitStack.push(rightNum + leftNum);
 	}
 }
+
+
 
 // redundant functions
 // bool RPN::validChar()

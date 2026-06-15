@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:15 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 23:16:38 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 08:14:07 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ class PmergeMe
 		int		_isValidArg(std::string);
 		void	_printNumbers(int);
 		void	_printTime(double, std::string);
-		void	_printAddDetails();
+		void	_printAdditionalDetails();
 		const std::vector<int> _jacobsthalSequence(std::size_t);
 		long	_worstCaseFJAComparisonCount(long n);
 

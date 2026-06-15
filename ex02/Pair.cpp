@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:21:21 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 20:14:21 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 08:29:14 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,22 @@ Pair &Pair::operator=(const Pair &other)
 	return *this;
 }
 
-Pair &Pair::operator()(const Element &a, const Element &b)
-{
-	if (a > b)
-	{
-		this->_bigger = a;
-		this->_smaller = b;
-	}
-	else
-	{
-		this->_bigger = b;
-		this->_smaller = a;
-	}
-
-	return *this;
-}
+// this is redundant / similar to my existing parameterized constructor
+// Pair &Pair::operator()(const Element &a, const Element &b)
+// {
+// 	if (a > b)
+// 	{
+// 		this->_bigger = a;
+// 		this->_smaller = b;
+// 	}
+// 	else
+// 	{
+// 		this->_bigger = b;
+// 		this->_smaller = a;
+// 	}
+//
+// 	return *this;
+// }
 
 Pair::~Pair() {}
 

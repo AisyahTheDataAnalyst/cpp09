@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 15:25:56 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/08 16:41:20 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:23:34 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,17 @@ void BitcoinExchange::exchange()
 		throw std::invalid_argument("Input file dosen't have header of \"date | value\"");
 	
 	// 3.0 check line by line of input file
+	int lineNum = 2;
 	while (std::getline(_inputFile, line))
 	{
 		try
 		{
+			std::stringstream lineNumSS;
+			std::string lineNumStr;
+			lineNumSS << lineNum;
+			lineNumSS >> lineNumStr;
+			std::string initErrorMsg("Line" + lineNumStr + std::string("\t: "));
+			
 			std::size_t pipePos;
 			std::size_t spaceBeforePipe;
 			std::size_t spaceAfterPipe;
@@ -69,21 +76,21 @@ void BitcoinExchange::exchange()
 				  spaceBeforePipe != std::string::npos && 
 				  spaceAfterPipe != std::string::npos   ))
 			{
-				std::string errMsg = "Bad input => \"" + line + "\"";
+				std::string errMsg = initErrorMsg + "Bad input => \"" + line + "\"";
 				throw std::invalid_argument(errMsg);
 			}
 
 			// 3.2 check date validity
 			date = line.substr(0, pipePos - 1);		// -1 to exclude 1 space before '|' 
-			inputDateValidation(date);
+			inputDateValidation(date, initErrorMsg);
 			
 			// 3.3 check value validity
 			// getline dosent include newline into target string
 			valueStr = line.substr(pipePos + 2);	// +2 to exclude 1 space after '|'
-			value = inputValueValidation(valueStr);
+			value = inputValueValidation(valueStr, initErrorMsg);
 
 			// 3.4 check if theres matching lower_bound date to the iput date
-			exchangeRate = matchingDataDate(date);
+			exchangeRate = matchingDataDate(date, initErrorMsg);
 
 			// 3.5 get & print result
 			result = value * exchangeRate;
@@ -91,8 +98,9 @@ void BitcoinExchange::exchange()
 		}
 		catch (std::exception &e)
 		{
-			std::cerr << "Error: " << e.what() << std::endl;
+			std::cerr << RED << "Error: " << e.what() << RESET << std::endl;
 		}
+		++lineNum;
 	}
 	
 	_inputFile.close();
@@ -136,6 +144,7 @@ void BitcoinExchange::saveDataIntoMap()
 	}
 	_dataFile.close();
 	
+	// debug print test
 	// std::cout << "done save into map" << std::endl;
 	// for (std::map<std::string, double>::iterator it = _perfectData_map.begin(); 
 	// 	it != _perfectData_map.end(); ++it)

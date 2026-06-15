@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:12 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/05 18:57:05 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:18:38 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ class RPN
 		void _processDigit(char);
 		bool _isValidOperator(char);
 		void _processOperator(char);
-		//
+		
+		// redundant
 		// bool validChar();
 		// bool validTotalDigitsOps();
 

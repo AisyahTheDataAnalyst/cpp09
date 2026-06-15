@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 23:18:59 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 10:13:55 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // Public OCF
 
 // Parameterized Constructor
-// All parsing is here 
+// All parsing is done here 
 PmergeMe::PmergeMe(int ac, char **av)
 {
 	for (int i = 1; i < ac; ++i)
@@ -29,6 +29,7 @@ PmergeMe::PmergeMe(int ac, char **av)
 		_deque.push_back(num);
 	}
 	_isSorted(false, _vector);
+	_isSorted(false, _deque);
 	_printNumbers(BEFORE);
 }
 
@@ -38,6 +39,10 @@ PmergeMe::~PmergeMe() {}
 
 // Public member functions
 
+// std::clock()
+// 	- Return: the CPU time/processor time consumed by the program, measured in clock_t units. 
+// 	- This function is typically used to measure elapsed CPU time
+//	- the result can be converted to seconds with CLOCKS_PER_SEC
 // Convert the difference to microseconds
 // Multiply by 1,000,000 first to avoid integer division truncation
 void PmergeMe::activate()
@@ -66,7 +71,7 @@ void PmergeMe::activate()
 	_printNumbers(AFTER);
 	_printTime(vElapse_microseconds, "vector");
 	_printTime(dElapse_microseconds, "deque");
-	_printAddDetails();
+	_printAdditionalDetails();
 }
 
 
@@ -80,9 +85,9 @@ void PmergeMe::activate()
 
 // Must be: (must use the merge-insert sort algorithm to sort the positive integer sequence)
 // 1. Digits
-// 2. Positive interger 
-// 3. Not overflow
-// 4. Dupes? Accept => easier than make it non-dupes only
+// 2. Positive interger (>= 1, 0 is not a positive interger)
+// 3. Not overflow than a valid positive interger
+// 4. Dupes? Accept => easier than make it non-dupes only + reduce comparison counts
 int PmergeMe::_isValidArg(std::string av)
 {
 	// 1. Digit characters only
@@ -115,9 +120,12 @@ void PmergeMe::_printNumbers(int when)
 
 void PmergeMe::_printTime(double elapsedTime, std::string contName)
 {
+	std::string colour = CYAN;
+	if (contName == "vector")
+		colour = BLUE;
 	std::cout 
-	<< std::setprecision(7)
-	<< "Time to process a range of " << _vector.size() << " elements with std::" << contName << " : " << (double)elapsedTime << " us" << std::endl;
+	<< std::setprecision(10)
+	<< "Time to process a range of " << _vector.size() << " elements with std::" << colour << contName << RESET << " : " << colour << (double)elapsedTime << " us" << RESET << std::endl;
 }
 
 // Jacobsthal Sequence is for:
@@ -151,7 +159,7 @@ const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
 	fullInsertionOrder.push_back(0);
 	std::size_t latestSeq = 0;
 
-	for (std::size_t i = 1; i < jacobsthalSeq.size(); ++i) // 0, 1, 1, 3, 5 , pemdsize == 5
+	for (std::size_t i = 1; i < jacobsthalSeq.size(); ++i) // 0, 1, 1, 3, 5 & pendsize == 5 ==> 0, 1, 3, 2, 4 (fullInsertionOrder)
 	{
 		std::size_t currSeq = jacobsthalSeq[i];
 		if (currSeq == latestSeq)
@@ -172,7 +180,6 @@ const std::vector<int> PmergeMe::_jacobsthalSequence(std::size_t pendSize)
 }
 
 // Computes the Ford-Johnson worst-case comparisons for 'n' elements.
-// Fully compliant with C++98 standards.
 long PmergeMe::_worstCaseFJAComparisonCount(long n) 
 {
     long totalComparisons = 0;
@@ -180,7 +187,8 @@ long PmergeMe::_worstCaseFJAComparisonCount(long n)
     // Change-of-base constant for base-2 logarithm
     const double LOG_2 = std::log(2.0);
 
-    for (long k = 1; k <= n; ++k) {
+    for (long k = 1; k <= n; ++k) 
+	{
         // Calculate (3 * k) / 4 as a floating-point value
         double value = (3.0 * k) / 4.0;
         
@@ -194,12 +202,13 @@ long PmergeMe::_worstCaseFJAComparisonCount(long n)
     return totalComparisons;
 }
 
-void PmergeMe::_printAddDetails()
-{
+void PmergeMe::_printAdditionalDetails()
+{	
 	std::cout 
 	<< "\n===Additional Details===\n"
 	<< "Total elements sorted: " << _vector.size() << '\n'
 	<< "Total comparison count: " << Element::comparisonCount << '\n'
-	<< "Ford-Johnson Algorithm's ideal worst-case comparison count F(n) upon " << _vector.size() << " elements: " << _worstCaseFJAComparisonCount(_vector.size())
+	<< "Ford-Johnson Algorithm's ideal worst-case comparison count, F(n) upon " << _vector.size() << " elements: " << _worstCaseFJAComparisonCount(_vector.size()) << '\n'
+	<< "My comparison count passed F(n)?: " << ((Element::comparisonCount <= _worstCaseFJAComparisonCount(_vector.size())) ? GREEN "YESSsSsSs lesgoooo" RESET : RED "Sadly no :(" RESET)
 	<< std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/11 08:29:19 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 19:14:44 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 08:42:40 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ struct Element
 {
 	private:	
 		int _value;
-		std::vector<int> _id; //! ContainerI
+		std::vector<int> _id;	// does not violate the container constraint because you are not using it to hold, sort, or manage the list of input elements given by the user.
 		Element();
 		
 	public:

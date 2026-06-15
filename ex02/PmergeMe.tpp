@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/10 18:17:51 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/14 22:52:05 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:12:46 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void PmergeMe::_pairMainPend(ContainerI &cont, ContainerE &main, ContainerE &pen
 	}
 	if (i < cont.size())
 	{
-		Element staggerElement = Element(cont[i], id);
-		pend.push_back(staggerElement);
+		Element stragglerElement = Element(cont[i], id);	// Straggler: Someone or something that is left behind or separates from the main group.
+		pend.push_back(stragglerElement);
 	}
 }
 
@@ -82,7 +82,7 @@ void PmergeMe::_mergeSort(ContainerE &main, ContainerE &pend)// ContainerE &newM
 		newMain.push_back(pair.getBigger());
 		newPend.push_back(pair.getSmaller());	
 	}
-	// handle staggler (odd element)
+	// handle stragglerElement (odd element)
 	if (main.size() % 2 != 0)
 	{
 		main.back().pushId(id);
@@ -92,15 +92,15 @@ void PmergeMe::_mergeSort(ContainerE &main, ContainerE &pend)// ContainerE &newM
 	// 2. Recursive -> sort the winner chain
 	_mergeSort(newMain, newPend);
 	
-	// 3. Unwind phase: Assign the sorted winners back to main,
+	// 3. Unwind phase -> Assign the sorted winners back to main,
 	// then insert this level's pend items into it.	
 	main = _insertionSort(newMain, pend);
 }
 
 // 2.	InsertionSort = BinarySearchInsertion + JacobsthalSequence
-// 1st - reorganize pend as main's id sequence
-// 2nd - index 0 of pend is bruteforced/automatically inserted into index 0 of main
-// 3rd - BSI + JS
+// 1st - reorganize pend to be sorted just as main's id sequence (here the main is sorted already)
+// 2nd - index 0 of pend is bruteforced/automatically inserted into index 0 of main -> bruteforcing minimize the comparison count -> crucial for Ford Johnson Algo or F(n)
+// 3rd - IS = BSI + JS
 template <typename ContainerE>
 ContainerE &PmergeMe::_insertionSort(ContainerE &main, ContainerE &pend)
 {	
@@ -112,7 +112,7 @@ ContainerE &PmergeMe::_insertionSort(ContainerE &main, ContainerE &pend)
 	{
 		const std::vector<int> jacobSeq = _jacobsthalSequence(pend.size());		
 		main.insert(main.begin(), pend[jacobSeq[0]]);
-		for (std::size_t i = 1; i < jacobSeq.size(); ++i)
+		for (std::size_t i = 1; i < jacobSeq.size(); ++i)	// when main.size() == 1, pend.size() will either be 1 or 2 only -> will skip this if pend.size() == 1
 			if (jacobSeq[i] < static_cast<int>(pend.size()))
 				_binarySearchInsertion(main, pend[jacobSeq[i]], 1);									
 		for (std::size_t i = 0; i < main.size(); ++i)
@@ -133,24 +133,20 @@ ContainerE &PmergeMe::_insertionSort(ContainerE &main, ContainerE &pend)
 	main.insert(main.begin(), sortedPend[0]);
 	for (std::size_t i = 1; i < jacobSeq.size(); ++i)
 	{
-		int targetedIndex = jacobSeq[i];
-		if (targetedIndex < static_cast<int>(sortedPend.size()))
+		int toBeInsertedValueIndex = jacobSeq[i];
+		std::size_t winnerIndex = main.size();
+		if (toBeInsertedValueIndex < static_cast<int>(winnerIndex)) // Skip this if its a straggler Element -> winnerIndex just will be main.size() 
 		{
-			std::size_t winnerIndex = main.size();
-			if (targetedIndex < static_cast<int>(main.size()))
+			for (std::size_t j = 0; j < winnerIndex; ++j)
 			{
-				int targetId = sortedPend[targetedIndex].getId();
-				for (std::size_t j = 0; j < main.size(); ++j)
+				if (main[j].getId() == sortedPend[toBeInsertedValueIndex].getId())
 				{
-					if (main[j].getId() == targetId)
-					{
-						winnerIndex = j;
-						break;
-					}
+					winnerIndex = j; // binary search window shrinks dramatically - > minimize comparison count a lot
+					break;
 				}
 			}
-			_binarySearchInsertion(main, sortedPend[targetedIndex], winnerIndex);
 		}
+		_binarySearchInsertion(main, sortedPend[toBeInsertedValueIndex], winnerIndex);
 	}
 				
 	for (std::size_t i = 0; i < main.size(); ++i)
@@ -201,10 +197,3 @@ void PmergeMe::_isSorted(bool wantedScenario, ContainerI &container)
 	if (sorted != wantedScenario && sorted == false)
 		throw std::invalid_argument("Unsorted arguments");
 }
-
-
-
-//! check comparisonCounts must within ideal numbers , check online or in the book whats the ideal numbers
-//! check time is it nicely accurate
-//! cehck if i can use exception invailid_argument for these such cases, is it acceotable to use exception for these kind of events
-//! prepaare full understanding why need Jacobstajl sequence, whats benefit of ford johnson algorithm, how to explain this easily to evaluators so they dont get overwhelmed
