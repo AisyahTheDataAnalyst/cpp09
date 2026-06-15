@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:59:04 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/15 10:13:55 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 12:34:58 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,5 +210,5 @@ void PmergeMe::_printAdditionalDetails()
 	<< "Total comparison count: " << Element::comparisonCount << '\n'
 	<< "Ford-Johnson Algorithm's ideal worst-case comparison count, F(n) upon " << _vector.size() << " elements: " << _worstCaseFJAComparisonCount(_vector.size()) << '\n'
 	<< "My comparison count passed F(n)?: " << ((Element::comparisonCount <= _worstCaseFJAComparisonCount(_vector.size())) ? GREEN "YESSsSsSs lesgoooo" RESET : RED "Sadly no :(" RESET)
-	<< std::endl;
+	<< '\n' << std::endl;
 }
