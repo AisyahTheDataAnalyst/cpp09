@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/15 11:25:49 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 11:49:26 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int RPN::run()
 		
 		if (_digitStack.size() != 1)
 		{
-			std::cerr << "ERROR: Extra digits left in the stack after processing all operators";
+			std::cerr << "ERROR: Extra digits left in the stack after processing all operators, or no operators exist";
 			return 1;
 		}
 
