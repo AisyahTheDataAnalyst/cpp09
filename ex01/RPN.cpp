@@ -6,7 +6,7 @@
 /*   By: aimokhta <aimokhta@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/13 18:58:00 by aimokhta          #+#    #+#             */
-/*   Updated: 2026/06/15 11:49:26 by aimokhta         ###   ########.fr       */
+/*   Updated: 2026/06/15 12:32:37 by aimokhta         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ int RPN::run()
 				_processOperator(_str[i]);
 			else
 			{
-				std::cerr << "ERROR: Invalid character";
+				std::cerr << "ERROR: Invalid character" << std::endl;
 				return 1;
 			}
 		}
 		
 		if (_digitStack.size() != 1)
 		{
-			std::cerr << "ERROR: Extra digits left in the stack after processing all operators, or no operators exist";
+			std::cerr << "ERROR: Extra digits left in the stack after processing all operators, or no operators exist" << std::endl;
 			return 1;
 		}
 
@@ -147,35 +147,36 @@ void RPN::_processOperator(char c)
 	if (_digitStack.size() < 2)
 		throw std::runtime_error("Insufficient digits in stack to process operator");
 	
-	// 1 - the most top number will be leftsided number in operation
-	int leftNum;
-	leftNum = _digitStack.top();
-	_digitStack.pop();
-	
-	// 2 - next most top number will be rightsided number in operation
+	// 1 - the most top number will be rightsided number in operation
 	int rightNum;
 	rightNum = _digitStack.top();
 	_digitStack.pop();
 	
-	// debug print testing
-	// std::cout << "rightnum now is << " << rightNum << std::endl;
-	// std::cout << "operator now is " << c << std::endl;
-	// std::cout << "leftnum now is << " << leftNum << std::endl;
-
+	// 2 - next most top number will be leftsided number in operation
+	int leftNum;
+	leftNum = _digitStack.top();
+	_digitStack.pop();
+	
 	// 3.0 - push  the result of operation back to the stack
 	// 3.1 - for next operation, current result will be the leftNum
 	if (c == '+')
-		_digitStack.push(rightNum + leftNum);
+		_digitStack.push(leftNum + rightNum);
 	else if (c == '-')
-		_digitStack.push(rightNum - leftNum);
+		_digitStack.push(leftNum - rightNum);
 	else if (c == '*')
-		_digitStack.push(rightNum * leftNum);
+		_digitStack.push(leftNum * rightNum);
 	else if (c == '/')
 	{
-		if (leftNum == 0)
+		if (rightNum == 0)
 			throw std::runtime_error("Invalid division by zero");
-		_digitStack.push(rightNum + leftNum);
-	}
+		_digitStack.push(leftNum / rightNum);
+	}	
+
+	// debug print testing
+	// std::cout << "leftnum now is " << leftNum << std::endl;
+	// std::cout << "operator now is " << c << std::endl;
+	// std::cout << "rightnum now is " << rightNum << std::endl;
+	// std::cout << "result is " << _digitStack.top() << '\n' << std::endl;
 }
 
 
